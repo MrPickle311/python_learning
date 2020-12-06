@@ -42,7 +42,16 @@ print(math.trunc(-x/y))
 print(2 ** 200) # bardzo duza liczba ,ale jest od razu 
 #dostepna w jednej z zmiennej ,tak od reki
 
-dec = 10
-bin = 0b10101
-hex = 0xFFF
-oct = 0o777
+dec1 = 10
+bin1 = 0b10101
+hex1= 0xFFF
+oct1 = 0o777
+
+print(oct(dec1))
+print(bin(hex1))
+print(hex(bin1))
+
+print(int('23232323',4))
+print(int('34343434KKKMM',35)) #pierwszy argument jest jakas liczba
+#zapisana w formacie , ktory okresla drugi argument
+#sama funkcja int konwertuje wszystko do postaci dziesietnej
