@@ -150,3 +150,70 @@ if {8,1,4,2,3,2,1} > h3:
     print('{8,1,4,2,3,2,1} jest nadzbiorem h3' )
 if 4 in h3:
     print('4 jest w zbiorze h3')
+h3.pop() #tutaj po prostu ściąga wartość z prawej strony
+print(h3)
+
+#takie wywołanie spowoduje błąd
+# {1,2,3} | [3,4]
+#ale takie nie
+print({1,2,3}.union([3,4,5]))
+
+#W ZBIORACH MOGĄ BYĆ OBECNE TYLKO ELEMENTY 
+#NIEMUTOLWALNE,poniższa linijka zgłosi błąd
+#print({65,34,12}.add([2,3,4]))
+#print({65,34,12}.add({2,3,4}))
+
+h5 = {2,3,4}
+h5.add((1,2,3))
+print(h5)
+#ale krotki już można dodawać 
+
+print(h5 | {(2,3),(6,5)})
+print(frozenset({1,2,3})) #inne zbiory można
+#przechowywać w niemutowalnym zbiorze frozenset
+
+print("Zbiory skladane")
+
+h6 = {x ** 2 for x in [1,2,3,4]}
+#każdy x podnoszę do kwadratu i umieszczam go w h6
+#x-sy biorę z pętli for , która iteruje po liście
+print(h6)
+h7 = { 3*x + ' element' for x in 'ABCDEF'} | {'XXX element'}
+print(h7)
+#ZBIORY Z DEFINICJI NIE SA UPORZĄDKOWANE
+
+print("Zastosowanie zbiorow")
+list1 = [4,4,2]
+list2 = set(list1)
+print(list2)
+#zbiory mogą służyć do odfiltrowywania innych 
+#kontenerów,ale kolejność elementów może ulec zmianie
+
+print(set([2,3,4,56]) - set([2,3,4,2]))
+#roznica miedzy listami
+
+print(set('abcdef') - set('def'))
+#roznica miedzy zestawami znakow
+#kolejnosc losowa
+
+L1 , L2 = [1,2,5,4,3] , [2,5,3,4,1]
+if not L1 == L2:
+    print("Kolejnosc w listach ma znaczenie")
+if set(L1) == set(L2):
+    print(" ,ale nie dla zbiorow")
+if sorted(L1) == sorted(L2):
+    print(" ,ale posortowane listy sa sobie rowne")
+
+#Zastosowanie do baz danych
+
+engineers = {'robert','amadeusz','anna','aleksander'}
+managers = {'edward','amadeusz'}
+
+if 'robert' in engineers:
+    print("Robert jest inzynierem!")
+print('Inzynierowie i menadzerowie to : ' + str(engineers & managers) )
+
+print('Tylko inzynierowie : ' + str(engineers - managers) )
+print(str(managers ^ engineers))#Kto jest jednozadaniowy?
+# i inne operatory 
+
