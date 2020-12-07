@@ -117,3 +117,36 @@ g = 2.7
 
 print(fractions.Fraction(*g.as_integer_ratio()))# gwiazdka przekształca 
 # krotkę na zbiór argumentów
+
+print(fractions.Fraction.from_float(1.75))
+#inny sposób na konwersję
+
+print(float(fractions.Fraction(4,5)))
+
+print(fractions.Fraction(3,5) + 2)
+
+print(4/3 + fractions.Fraction(1,3))
+
+print("Zbiory")
+
+h = set([1,2,3,4,5])
+print(h)
+h.add(4)
+h.add(8)
+print(h)
+#w zbiorach elementy sa unikalne, wystepuja tylko raz
+
+h1 =h | {432,234,213,4,2}#suma zbiorów
+print(h1)
+h2 = h & {1,3,4,10}#część wspólna
+print(h2)
+
+h3 = h - {2,3,5,11}
+print(h3)
+
+if {1,4} < h3:
+    print("{2,3} jest podzbiorem h3")
+if {8,1,4,2,3,2,1} > h3:
+    print('{8,1,4,2,3,2,1} jest nadzbiorem h3' )
+if 4 in h3:
+    print('4 jest w zbiorze h3')
