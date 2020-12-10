@@ -173,4 +173,49 @@ print("Formatowanie tekstu")
 #za pomocą operatora % można formatowac ciagi znakow
 # formatowany_lancuch_znakow % (wyraz_formatujacy_1,wyraz_formatujacy_2,...)
 
+print('Dostalem %f punktow %s' % (1.5,'z pasow'))
+
+#%f - liczba float
+#%d - całkowita
+#%s - string
+
+print('Dostalem %s lub %s punktow %s ' % (1,1.6,'z pasow'))
+#wszystkie typy pasuja do %s,czesto bywa to najlepsze rozwiazanie
+#formatowanie tworzy nowy lancuch
+
+#znaki ,które można postawić po %
+# s Łańcuch znaków (lub dowolny obiekt str(X))
+# r To samo co s, z tym że wykorzystuje funkcję repr, a nie str
+# c Znak (int lub str)
+# d Liczba dziesiętna
+# i  Liczba całkowita
+# u To samo co d (przestarzałe, dawniej wymuszało liczbę całkowitą bez znaku)
+# o Liczba ósemkowa (podstawa 8)
+# x Liczba szesnastkowa (podstawa 16)
+# X To samo co x, jednak wyświetlane wielkimi literami
+# e Liczba zmiennoprzecinkowa w formacie wykładniczym, małą literą
+# E To samo co e, wyświetlane wielką literą
+# f Liczba zmiennoprzecinkowa w zapisie dziesiętnym
+# F Liczba zmiennoprzecinkowa w zapisie dziesiętnym (wielkie litery)
+# g Zmiennoprzecinkowe e lub f
+# G Zmiennoprzecinkowe E lub F
+# % Literał % (zapisywany jako %%)
+
+#Ogólna składnia formatująca 
+# %[(nazwa)][opcje][szerokość][.precyzja]kod_typu
+# Nazwa klucza do indeksowania słownika znajdującego się po prawej stronie wyrażenia
+# Opcje (flagi) określające na przykład wyrównywanie do lewej strony (-), znak liczby (+), spację
+#przed liczbami dodatnimi i znak - przed liczbami ujemnymi czy dopełnienie zerami (0).
+# Całkowita szerokość pola dla podstawionego tekstu.
+# Liczba cyfr (precyzja) wyświetlana po przecinku dla liczb zmiennoprzecinkowych
+
+x = 2341
+y = 32.3523423897642347823 * 0.0000000000001
+print( 'integers: ...%d...%-6d...%06d' % (x,x,x) )
+print('%05.6s' % y )
+print('%e | %.20f | %g' % (y,y,y))
+
+#print('%.*f' % (1/3.0 , 1/3.0) ) nie zadziała 
+print('%f, %.2f, %.*f' % (1/3.0, 1/3.0, 4, 1/3.0))
+#                                      ^^^ precyzja trzeciej liczby
 
