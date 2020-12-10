@@ -1,3 +1,4 @@
+import sys
 #łańcuchy są niemutowalne
 s1 = " 'hello' " #tak możemy dodać sobie cudzysłowy
 s2 = 'hello'
@@ -168,7 +169,7 @@ if(S.startswith('k ,')):
     print('S zaczyna sie od \'k ,\'')
 
 #############################################################################
-print("Formatowanie tekstu")
+print("Wyrazenia formatujace tekst")
 
 #za pomocą operatora % można formatowac ciagi znakow
 # formatowany_lancuch_znakow % (wyraz_formatujacy_1,wyraz_formatujacy_2,...)
@@ -218,4 +219,68 @@ print('%e | %.20f | %g' % (y,y,y))
 #print('%.*f' % (1/3.0 , 1/3.0) ) nie zadziała 
 print('%f, %.2f, %.*f' % (1/3.0, 1/3.0, 4, 1/3.0))
 #                                      ^^^ precyzja trzeciej liczby
+
+#formatowanie za pomocą słownika
+
+print('This costs %(value)d %(currency)s' % {'value':23 , 'currency' : 'euro' })
+
+#stworzmy kilka zmiennych
+
+x = 34
+y = "OK!"
+z = 23.231
+
+#uzycie tych zmiennych w stringu
+
+print('there are some nmbrs: %(x)d , %(y)s , %(z)f' % vars())
+#funkcja vars() pozwala na odnoszenia sie w sposób słownikowy do zmiennych
+
+var = ' i have %s of %s'
+print(var % ('couple','keys'))
+
+#####################################################################
+print('Metody formatujace tekst')
+#jest to po prostu metoda równoważna do poprzedniej , nie lepsza ,nie gorsza
+
+#podstawianie pozycyjne
+template = '{0} {1} {2}'
+#o co tu chodzi ? już tłumaczę:
+# wyrażenia {0} {1} {2} odnoszą się do kolejnych argumentów przekazanych
+# do funkcji format, są to klucze słownika ,czyli nie musi to być
+#konkretnie {0} {1} {2}. Może to być również {dane1} {dane2}
+print(template.format('xd','again xd ','XD')) 
+
+#podstawianie po słowie kluczowym
+template = '{dane1} and {dane2}'
+print(template.format(dane1 = '!!!', dane2 = '???'))
+#tutaj następuje użycie domyślnych argumetnów funkcji
+
+#podstawianie przez pozycję względną:
+template = '{} {} {}'
+print(template.format('xd1','xd2','xd3'))
+
+#połączenie technik
+template = 'the first arg is {0} , rest... {shape} , {colours}'
+template = template.format(1000,shape = 'traingle', colours = ['black','white'])
+print(template)
+
+worktype = 'I have {1[spam]} with os: {0.platform} and {1[mouse]} mouse '
+#                   ^korzystam tutaj z argumentu 1 oraz szukam klucza spam
+worktype = worktype.format(sys, {'spam' : 'computer','mouse' : 'wireless'} )
+#                              argument nr.1 jest słownikiem
+print(worktype)
+
+#połączenie wykorzystania list oraz słowników 
+list1 = 'OGAR'
+
+#również można indeksować po elementach listy 
+text = '{0[0]} + {0[1]} + AR + {1[0]} + {2}'
+text = text.format(list1,list1,'XD',list1)
+print(text)
+
+tuple1 = [1,2,3],[4,5,6],'XDDDD'
+text = text.format(*tuple1)
+print(text)
+
+#278
 
