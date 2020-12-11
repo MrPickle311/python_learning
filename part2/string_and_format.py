@@ -282,5 +282,5 @@ tuple1 = [1,2,3],[4,5,6],'XDDDD'
 text = text.format(*tuple1)
 print(text)
 
-#278
+#
 
