@@ -238,6 +238,10 @@ print('there are some nmbrs: %(x)d , %(y)s , %(z)f' % vars())
 var = ' i have %s of %s'
 print(var % ('couple','keys'))
 
+#obsługa listy , ale i tak muszę ją skonwertować na krotkę
+list2 = list('AiR')
+print('%s%s%s' % tuple(list2))
+
 #####################################################################
 print('Metody formatujace tekst')
 #jest to po prostu metoda równoważna do poprzedniej , nie lepsza ,nie gorsza
@@ -282,5 +286,26 @@ tuple1 = [1,2,3],[4,5,6],'XDDDD'
 text = text.format(*tuple1)
 print(text)
 
-#
+#zaawansowanie formatowanie
 
+#składnia zaawansowanego formatowania:
+# {nazwa_pola komponent !znacznik_przekształcenia :specyfikacja_formatu}
+# składnia elementu specyfikacja_formatu:
+# [[wypełnienie]wyrównanie][znak][#][0][szerokość][,][.precyzja][kod_typu]
+# kod_typu -> patrz tabelka
+#[,] <-- jezeli wstawie przecinek przed pozycją [.precyzja][kod_typu] ,to 
+# liczby tysięcy będą oddzielone przecinkami
+print('{0:.3}'.format(54.556745685675))
+print('{0:b} , {1:.3g} , {2:.3e} ,{2:e} , {3:x}'.format(5345,5345,5345,5345)) 
+L = [2,3,32]
+print('{0.__len__}'.format(L))
+print('{0.platform} , on {1[kind]}'.format(sys,dict(xd = 'xd',kind = 'PC')))
+
+
+s = 'j,aj,a'
+a1 = int(len(s)/2 - 1)
+print(a1)
+a2 = a1 + 1
+print(s[a1] + ' and ' + s[a2] )
+
+print(s[a1:a2 + 1])
