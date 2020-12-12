@@ -220,9 +220,11 @@ G.clear() # Czyszczenie
 print(G)
 
 G = {'aleks' : 'mohr' , 'nr' : 23}
-D = {'aleks': 'mohr' , 'figure' : 'brillant'}
+D = {'aleks': 'Hrjalson' , 'figure' : 'brillant'}
 
-G.update(D) # dołącza z D wszystkie pary ,których klucze nie są obecne w G
+G.update(D) # Wywołanie tej metody łączy klucze i wartości dwóch słowników
+#i po prostu ślepo nadpisuje odpowiednie wartości w przypadku kolizji
+#kluczy
 
 print(G)
 
