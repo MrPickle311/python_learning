@@ -232,6 +232,10 @@ print(G.get('nr'))                  # znajduje wartość pod kluczem lub zwraca
 print(G.get('offtop','not found!')) # wartość podaną jako drugi argument
                                     # domyślnie none
 
+print('Usuwanie')
+
+print(G.pop('nr'))
+#metoda pop usuwa wpis o zadanym kluczu oraz zwraca jego wartość
 G.pop('offtop','Not found!')
 #usuwanie według klucza, wartości domyślne (lub błąd), gdy brak
 #klucza
@@ -268,12 +272,60 @@ R = {x: x*2 for x in range(2,8,2)}
 print(R) # jak widać kluczami mogą być również obiekty innego typu 
 # niż string
 
+#po słowniku można iterować po kluczach, ale kolejność iteracji 
+#może być  losowa
 
+print('Iterowanie po slowniku!!!')
 
+table = {'1975': 'Monty Python i Swiety Graal', # klucz:wartość
+ '1979': 'Zywot Briana',
+ '1983': 'Sens zycia wedlug Monty Pythona'}
 
+for year in table:
+    print('Year : ' + year)
 
+#odwrócenie kluczy i wartości 
 
+keyslist = list(table.keys())
+valuelist = list(table.values())
 
+inversed_table = dict(zip(valuelist,keyslist))
+
+for name in inversed_table:
+    print('Name : ' + name)
+
+#ale iterować można jednocześnie klucze i wartości
+
+for (name,year) in inversed_table.items():
+    #tutaj musimy uzyc inversed_table.items()
+    #gdyż items zwraca krotki
+    print("Film : " + name + " was made in " + year )
+
+#szybsza wersja
+
+print('Szybsza wersja')
+for name in table:
+    print("Film : " + table[name] + " was made in " + name )
+
+###UWAGI
+
+#Na słownikach nie działają operacje sekwencyjne.
+#Przypisanie do nowych indeksów dodaje wpisy
+#Klucze nie zawsze muszą być łańcuchami znaków
+#By użyć klasy zdefiniowanej przez użytkownika trzeba specjalnie 
+#skonstruować klasę
+#Obiekty mutowalne, takie jak listy, zbiory i inne słowniki, nie
+#mogą być kluczami, ale są dozwolone jako wartości
+
+#Słowniki mogą emulować tablice rzadkie
+
+D = {}
+D[99] = 'xd'
+print(D)
+
+#tutaj przy sprawdzaniu i pobieraniu wartości należy użyć get i pop
+
+#313
 
 
 
