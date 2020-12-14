@@ -168,10 +168,19 @@ print(newlist)
 #Tworzenie pustego słownika
 D = {}
 
-#Słownik
+#Słownik tworzenie
 print('Tworzenie slownika')
+
 D = {'name' : 'Adam' , 'age' : 30}
+
+D = dict([('oh no','45'),('kwargs','xd')])
+print(D) # słownik można stworzyć z listy krotek
+
+D = dict.fromkeys(['a','b','c'],6)
+print(D) #tworzy słownik z kluczami a,b,c ,które wszystkie mają wartość 6
+
 D = dict(name = 'Adam' ,age = 40)
+print(D)
 
 #Zagnieżdżanie 
 print('Zagniezdzanie')
@@ -212,8 +221,22 @@ print(G.values()) # Wszystkie wartości
 print(G.items()) # Wszystkie klucze-wartości w postaci krotek
 
 # metodu keys,values,items zwracają obiekty iterowalne , które można 
-# przekształcić na listy
-print(G.copy()) # Kopiowanie
+# przekształcić na listy, ale same w sobie (obiekty iterowalne) nie 
+# obsługują operacji typowych dla list np. indeksowania
+# ale obsługują dużo operacji typowych dla zbiorów oprócz metody values
+# widok items() można traktować jako zbiór tylko wtedy ,gdy zawiera
+# wyłącznie elementy niemutowalne
+
+N = G.keys()
+M = E.keys()
+
+print(N | M) # suma zbiorowa kluczy
+
+O = G.copy()
+print(O) # Kopiowanie
+
+if O == G:
+    print('Slowniki sa sobie rowne!')
 
 G.clear() # Czyszczenie
 
@@ -291,6 +314,9 @@ valuelist = list(table.values())
 
 inversed_table = dict(zip(valuelist,keyslist))
 
+for key in table.keys(): # tutaj pętla przekształca sobie obiekt iterowalny
+    print(key)           # na listę
+
 for name in inversed_table:
     print('Name : ' + name)
 
@@ -320,12 +346,33 @@ for name in table:
 #Słowniki mogą emulować tablice rzadkie
 
 D = {}
-D[99] = 'xd'
+D[99] = 45
+D[(45,2,18)] = 22 #tutaj cała krotka jest kluczem
 print(D)
+print(D[(45,2,18)])
 
 #tutaj przy sprawdzaniu i pobieraniu wartości należy użyć get i pop
 
-#313
+#Słowniki składane
 
+L1 = [1,2,3]
+L2 = [4,5,6]
+
+H = {k : k**3 for k in [2,3,4,5]} # zamiast listy można wstawić dowolny
+                                  # obiekt iterowalny
+print(H)
+
+H = {k :v for (k,v) in zip(L1,L2)}
+print(H)
+
+#pytanka i ćwiczonka
+
+#1.
+L = list(0,0,0,0,0)
+L = [0 for x in range(5)]
+
+#2.
+D = dict(a = 0,b =  0)
+D = {'a' : 0,'b': 0} 
 
 
