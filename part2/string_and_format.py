@@ -119,7 +119,7 @@ print(k)
 #S.format(fmtstr, *args, **kwargs)        S.rjust(width [, fill])
 #S.index(sub [, start [, end]])           S.rpartition(sep)
 #S.isalnum()                              S.rsplit([sep[, maxsplit]])
-#S.isalpha()                              S.rstrip([chars])
+#S.isalpha()                              S.rstrip([chars]) usunięcie znaków końca wiersza
 #S.isdecimal()                            S.split([sep [,maxsplit]])
 #S.isdigit()                              S.splitlines([keepends])
 #S.isidentifier()                         S.startswith(prefix [, start [, end]])
