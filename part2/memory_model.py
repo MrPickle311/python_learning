@@ -42,6 +42,9 @@ print(L1)
 #jednak można skopiować listę i inne kontenery używając modułu copy
 L4 = copy.copy(L1)
 L5 = copy.deepcopy(L1)
+#deepcopy() wykonuje głęboką kopię obiektu 
+# Wywołanie to przechodzi przez obiekt w sposób rekurencyjny w 
+# celu skopiowania wszystkich zagnieżdżonych obiektów w obiekcie(liście)
 L4[0] = 100
 L5[1] = 300
 print(L4)
@@ -54,12 +57,38 @@ if L1 == L2:
 if L1 is L2: # operator is sprawdza ,czy obiekty są wskaźnikami do
     print("To są te same listy")# tego samego miejsca w pamięci
 
+#lepiej operatora is nie wykorzystywać do obiektów niemutowalnych
+#gdyż są one specjalnie optymalizowane podczas rozmieszczania w pamięci
+
 x = 5
 y = 5
 print(sys.getrefcount(5))
 # jest bardzo duzo referencji do obiektu o wartości 5
 # jest to obiekt niemutowalny
-# zwykła opytamalizacja
+# zwykła optymalizacja
 
 #Python stosuje model referencyjny
 
+# Przykład referowania do jednego obiektu w pamięci za pomocą 3 zmiennych
+
+X = [1,2,3]
+L = [5,X,'j']
+D = {'x' : X , 'y': 67}
+
+X[1] = 2222
+
+print(L[1][1])
+
+print(D['x'][1])
+
+#za pomocą wycinków i funkcji kopiujących można tworzyć kopie
+
+X = [1,2,3]
+L = [5,X[:],'j']
+D = {'x' : X[:] , 'y': 67}
+
+X[1] = 2222
+
+print(L[1][1])
+
+print(D['x'][1])

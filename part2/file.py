@@ -1,4 +1,6 @@
 from pathlib import Path
+import pickle
+import json, struct
 
 path_base = Path(__file__).parent # pobieranie ścieżki obecnego katalogu
 #print(path_base)
@@ -134,4 +136,82 @@ nmbrList = list(eval(S))
 
 print(nmbrList)
 
-#342 moduł pickle
+# moduł pickle służący do przechowywania obiektów w plikach
+
+D = {'2' :2,'1' :1 }
+
+datafilepath = Path(__file__).parent # pobieranie ścieżki obecnego katalogu
+
+datafilepath /= 'objfile.pkl'
+
+objfile = open(datafilepath,'wb')
+
+pickle.dump(D,objfile) #serializacja słownika D do pliku objfile
+
+objfile.close()
+
+objfile = open(datafilepath,'rb')
+
+D.clear()
+
+D = pickle.load(objfile) # załadowanie słownika z pliku
+
+print(D)
+
+#serializacja do JSON
+
+D = {'adam' : ' i ewa','ford' : 'mustang','price' : 3}
+
+string = json.dumps(D) #funkcja ta serializuje obiekt do stringa sformatowa
+                       #nego jako json
+
+print(string)
+
+D.clear()
+
+D= json.loads(string) # załadowanie obiektu ze stringa JSON
+
+print(D)
+
+#operacje plikowe na JSON
+
+jsonpath =  Path(__file__).parent
+
+jsonpath /= 'dict.json'
+
+jsondata = open(jsonpath,'w')
+
+json.dump(D,jsondata , indent= 5 ) # zapisywanie obiektu do pliku json
+
+jsondata.close()
+
+jsondata = open(jsonpath,'r')
+D.clear()
+
+D = json.load(jsondata) # wczytywanie obiektu z pliku json 
+
+print(D)
+
+
+# moduł struct ogarnia spakowane dane binarne
+
+data2path = Path(__file__).parent
+
+data2path /= 'data2.bin'
+
+data = struct.pack('>i4sh',7,b'sdasdasd',8)
+#pakowanie danych do zmiennej data
+
+F = open(data2path,'wb')
+
+F.write(data)
+
+F.close()
+
+F = open(data2path,'rb')
+
+data2 = F.read()
+
+data3 = struct.unpack('>i4sh',data2)
+#wypakowanie 
+print(data3)
