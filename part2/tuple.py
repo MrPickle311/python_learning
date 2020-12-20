@@ -37,6 +37,9 @@ R = (34,'fafa',43)
 print(T + R)
 
 print(3 * T)
+#rozmiar krotki 
+
+print(len(R))
 
 #sortowanie 
 
@@ -97,3 +100,10 @@ print(A.moeny)
 
 print(A._asdict()) # konwersja na słownik
 
+#ćwiczonko 
+
+K = (4,5,6)
+
+K = ((0,) + K[1:3])
+
+print(K)

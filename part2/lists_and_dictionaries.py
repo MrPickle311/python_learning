@@ -42,13 +42,49 @@ L1 = [2,3,4]
 L2 = [5,6,7]
 print(L1 + L2) 
 
-#powtórzenie
-K = L * 3   
+#powtórzenie elementów listy
+K = L1 * 3   
 print(K)
+
+#powtórzenie list
+V = [L1] * 3
+print(V)
+
+#zauważ ,że tutaj V składa się z 3 referencji do listy L
+
+L1[1] = 0
+
+print(V)
+
+#tworzenie kopii zamiast referowania do elementów innej listy
+
+V = [list(L1)] * 4 # tutaj zostaną stworzone 4 referencje do kopii L1
+
+print(V)
+
+L1[1] = 99
+
+print(V) # teraz V nie zostanie zmieniona
+
+V[0][1] = 99
+
+print(V) # lecz teraz każdy element V zostanie zmieniony
+
+#tworzenie prawdziwych kopii
+
+V = [list(L1) for x in range(4) ] # tutaj każda z zagnieżdżonych list jest niezależną kopią L1
+
+L1 = 10000
+V[0][1] = 'xd'
+
+print(V)
 
 #w przypadku konkatencji ,czy powtórzenia dostajemy nową listę
 
 #Iteracja, przynależność
+
+print('Iteracja i przynaleznosc')
+
 for x in L:
     print(x)
 p = 3 in L
@@ -368,7 +404,7 @@ print(H)
 #pytanka i ćwiczonka
 
 #1.
-L = list(0,0,0,0,0)
+L = list([0,0,0,0,0])
 L = [0 for x in range(5)]
 
 #2.
