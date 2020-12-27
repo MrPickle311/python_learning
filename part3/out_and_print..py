@@ -19,7 +19,24 @@ sys.stdout.write(str(L))
 
 #instrukcje print po prostu wywołują metodę .write() na sys.stdout
 
+#jednak pamiętaj by sobie zapisać ten strumień!
+
+temp = sys.stdout
+
 sys.stdout = open('data.txt','w')
 print('xdxdxdxdxdxdx') # zapis znaków do pliku
 
-#413 Automatyczne przekierowanie strumienia
+sys.stdout.close()
+sys.stdout = temp
+print(open('data.txt','r').read())
+
+#Automatyczne przekierowanie strumienia
+
+#jednak da się jednorazowo zmienić plik docelowego zapisu
+f = open('data.txt','w')
+print(4*'{0[what]} and {1}'.format(dict(xd= 1,what= 5),555),sep= ' // ',
+end='\n\n',file=f)
+f.close()
+
+#strumień błędów
+sys.stderr.write('Some error!')
