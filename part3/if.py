@@ -30,4 +30,27 @@ print([] and {})
 print({} and [])
 #jeśli mamy false and false to zwraca lewą stronę
 
-#432 Wyrażenie trójargumentowe if/else
+#instrukcję warunkową można zapisać w jednym wyrażeniu
+
+X = 0
+Z = 0
+
+if X:
+    Z = 9
+else:
+    Z = 12
+
+Z = 9 if X else 12
+print(Z)
+
+#dwie powyższe instrukcje są tożsame
+
+#można równiez zrobić taką sztuczkę za pomocą listy
+A = [23,'sd'][bool(X)]
+print(A)
+
+#wyodrębnianie elementów o wartości true
+
+L= [1,2,{},'',0,2,3]
+L  = list(filter(bool,L))
+print(L)
