@@ -120,4 +120,80 @@ for x in L:
     x = 0
 print(L)
 
-#Warto pamiętać — skanery plików 450
+#obsługa plików za pomocą pętli
+
+f = open('mydata.txt')
+while True:
+    dat = f.read(1)
+    if not dat: break
+    print(dat,sep='',end='')
+else:
+    f.close()
+
+print('\n')
+
+for char in open('mydata.txt').read():
+    print(char,sep='',end='')
+
+print('\n')
+
+f = open('mydata.txt')
+
+while True:
+    line = f.readline()
+    if not line: break
+    print(line,end='')
+
+f.seek(0)
+print('\n')
+while True:
+    dat = f.read(8) #bierz po 8 bajtów
+    if not dat: break
+    print(dat,sep='',end='')
+print('\n')
+#for -> iterowanie jednokrotne po całej kolekcji
+#while -> wyspecjalizowane iterowanie
+
+#range -> zwraca listę kolejnych liczb całkowitych
+#zip -> zwraca serię krotek równoległych elementów -> można za pomocą jednego
+#fora przechodzić po kilku sekwencjach
+#enumerate -> generuje wartości , jak i indeksy elementów obiektu iterowalnego
+
+#preferuj for nad while , oraz traktuj range jako ostatnią deskę ratunku
+#tworzenie listy za pomocą range
+L = list(range(20,2,-2))
+print(L)
+
+#coś jak reverse
+L = list('strgth')
+for i in range(int(len(L)/2 - 1)):
+    buffer = L[len(L) - i - 1] 
+    L[len(L) - i - 1] = L[i]
+    L[i] = buffer
+print(L)
+
+#ale lepiej za pomocą wycinków
+
+#wypisywanie,co drugi znak
+S = 'enryhaenber'
+for x in range(0,len(S),2):
+    print(S[x],end='')
+print('\n')
+#lub łatwiej
+for c in S[::2]: print(c,end='')
+
+print('\n')
+
+#iterowanie po liście i jej modyfikowanie
+L = [1,2,3,4,5]
+for x in L:
+    x *= 2
+print(L)
+#nie działa ,bo modyfikuję zmienną x , a nie element z listy
+
+for i in range(len(L)):
+    L[i] *= 2
+print(L)
+#teraz działa
+
+#457 Taki wynik...
