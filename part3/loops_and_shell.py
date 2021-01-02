@@ -1,3 +1,6 @@
+import os
+from urllib.request import urlopen
+
 def pred(x):
     return x != 0
 
@@ -196,4 +199,50 @@ for i in range(len(L)):
 print(L)
 #teraz działa
 
-#457 Taki wynik...
+L1 = ['a','b','c','d']
+L2 = [1,2,3,4]
+
+for (x,y) in zip(L1,L2):
+    print(x,y,sep=' ')
+
+L3 = [12,23,34,45]
+
+#jednak zip potrafi robić listę krotek 
+for (x,y,z) in zip(L1,L2,L3):
+    print(x,y,z)
+
+#ale jeśli dam listy o różnych długościach ,to lista krotek będzie mieć
+#długość najkrótszej z list
+
+L3 = [12,23]
+
+for (x,y,z) in zip(L1,L2,L3):
+    print(x,y,z)
+
+#jeśli chcę jednocześnie iterować przez elementy listy oraz mieć obecny 
+#numer indeksu
+
+for (idx,val) in enumerate(L):
+    print('value: '+str(val) + ' under idx : ' + str(idx))
+
+for (idx,line) in enumerate(open('mydata.txt')):
+    print(str(idx) + ' : ' + line,end='')
+print('')
+
+#obsługa powłoki
+
+F = os.popen('dir') # polecenie powłoki 
+print(F.readline()) # cała linia
+print(F.read(50)) #bajty
+print(os.popen('dir').readlines()) # wszystkie linie
+print('')
+for cmd in os.popen('dir'):
+    print(cmd)
+
+os.system('dir') # tutaj zwykle zostaje odpalone nowe okno 
+
+for (itr,line) in enumerate(os.popen('systeminfo')):
+    print(str(itr)+': '+line)
+
+for line in urlopen('http://learning-python.com/books'):
+    print(line)
