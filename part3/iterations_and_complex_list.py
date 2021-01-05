@@ -184,4 +184,86 @@ print(L)
 L.extend(open('mydata.txt'))
 print(L)
 
-#481 Zgodnie z tym, co napisaliśmy w
+L = [1,2,3]
+L.append(open('mydata.txt')) #metoda open NIE iteruje,więc wsadza od razu
+print(L)                     #cały obiekt 
+
+#tworzenie zbiorów za pomocą iteracji
+S = set(open('mydata.txt'))
+print(S)
+
+#tworzenie słowników za pomocą iteracji
+D = {ix: line for ix,line in enumerate(open('mydata.txt'))}
+print(D)
+
+#dodatkowo wykorzystanie filtrów
+D = {ix : line for ix,line in enumerate(open('mydata.txt')) if ix % 2 == 0}
+print(D)
+
+#dodatkowe funkcje pomocnicze pracujące na obiektach iterowalnych
+L = [1,2,3,4,5,6]
+print(sum(L))
+print(any(L)) #jeśli którykolwiek wyraz != False zwraca True
+print(all(L))
+L.append(0)
+print(all(L)) # jeśli wszystkie wyrazy == True zwraca True
+L.append(0)
+print(max(L))
+print(min(L))
+
+#rozpakowywanie kolekcji wartości do postaci poszczególnych argumentów
+
+def fnc(a,b,c,d):
+    return a+b+c+d
+L = [1,2,3,4]
+print(fnc(*L))
+
+#Funkcje map,zip,filter
+#funkcje te są swoimi własnymi iteratorami ,czyli nie mogę tam  przeprowadzać
+#kilku iteracji jednocześnie
+
+M = map(abs,[0,-2,-3])
+print(M) #to nie jest lista!
+
+for x in M: print(x)
+
+#iterator można przekształcić w listę
+L = list(map(abs,(1,-4,-6)))
+print(L)
+
+#zip
+for pair in zip((1,2,3),('1','2','3')): print(pair)
+
+L = zip((1,2,3),('1','2','3'))
+L2 = next(L)
+print(L2)
+L2 = next(L)
+print(L2)
+
+#filter tak samo
+
+#Iteratory wieloktrone vs pojedyncze
+
+R = range(4)
+I1 = iter(R)
+print(next(I1))
+I2 = iter(R)
+print(next(I1))
+print(next(I2))
+#omawiane wcześniej funkcje takich bajerów nie obsługują
+
+#Widoki słowników
+
+D = dict(a=1,b=2,c=3)
+K = D.keys()
+#next(K) #to nie są obiekty iterowalne
+I = iter(K)
+#ale mają iteratory
+
+#ale same słowniki są obiektami iterowalnymi 
+for keys in D: print(keys)
+
+#491
+
+
+
