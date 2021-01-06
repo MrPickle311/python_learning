@@ -263,7 +263,6 @@ I = iter(K)
 #ale same słowniki są obiektami iterowalnymi 
 for keys in D: print(keys)
 
-#491
 
 
 
