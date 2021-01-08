@@ -222,7 +222,7 @@ print(fnc(*L))
 #funkcje te są swoimi własnymi iteratorami ,czyli nie mogę tam  przeprowadzać
 #kilku iteracji jednocześnie
 
-M = map(abs,[0,-2,-3])
+M = map(abs,[0,-2,-3]) #zwraca obiekt iterowalny
 print(M) #to nie jest lista!
 
 for x in M: print(x)
