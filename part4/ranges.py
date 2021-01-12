@@ -117,4 +117,58 @@ r3 = maker(2)
 print(r3(3))
 
 #549
-#Funkcje fabrykujące kontra klasy, runda pierwsza
+#funkcja zawsze pamięta wszystkie wartości w zasięgu otaczającym ją
+def fn1():
+    x = 88  #Python zanim wejdzie do funckji fn2() x,y zostają obliczone
+    def fn2(x=x,y=20): #domyślne argumenty
+        print(x,y)
+    fn2()
+fn1()
+
+#staraj się unikać zagnieżdżenia funkcji
+
+
+L = [23,2.3,"sadsada",'XD',dict(x=23,y=45)]
+
+#lambdy mają swoje własne zasięgi
+
+def fn3():
+    x = 4
+    action = lambda n: x ** n + 3 # x=4 jest pamiętane 
+    # lub action = (lambda n: x ** n + 3)
+    return action
+x = fn3()
+print(x(3))
+
+def makeActions(): # funkcja zwracająca listę funkcji
+    acts = []       # jednak takie rozwiązanie nie działa
+    for i in range(5): # zauważ ,że lambdy będą wywoływane po zakończeniu pętli
+        acts.append(lambda x: i ** x)#więc dla wszystkich pięciu lambda i będzie równe 4
+    return acts
+
+acts = makeActions()
+print(acts[0](2))
+print(acts[1](2))
+print(acts[2](2))
+print(acts[3](2))
+
+def makeActions2(): # funkcja zwracająca listę funkcji
+    acts = []       # takie rozwiązanie działa
+    for i in range(5): #ale pamiętaj ,że tak mogę przekazać obiekt mutowalny ,co może narobić kłopotów
+        acts.append(lambda x,i=i: i ** x)#użycie domyślnej wartości
+    return acts                          #argumentów pozwala na takie zapamiętywanie
+
+acts = makeActions2()
+print(acts[0](2))
+print(acts[1](2))
+print(acts[2](2))
+print(acts[3](2))
+
+#dzięki instrukcji nonlocal istnieje możliwość modyfikacji zmiennej w zasięgu funkcji 
+#zawierającej funkcję. W przeciwieństwie do global zmienne nonlocal muszą już istnieć
+#w momencie deklaracji w zasięgu funkcji zawierającej
+#nazwa zmiennej jest szukana tylko w zasięgu funkcji zawierającej funkcję
+
+#instrukcja nonlocal całkowicie pomija zasięg lokalny funkcji
+
+# 555 Instrukcja nonlocal w akcji
