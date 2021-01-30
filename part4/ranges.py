@@ -170,5 +170,34 @@ print(acts[3](2))
 #nazwa zmiennej jest szukana tylko w zasięgu funkcji zawierającej funkcję
 
 #instrukcja nonlocal całkowicie pomija zasięg lokalny funkcji
+# 555
+print('nonlocal\n\n')
 
-# 555 Instrukcja nonlocal w akcji
+def func4(y):
+    x = y
+    def nested(z):
+        nested.state = z #artrybut funkcji
+        print('state = ',str(nested.state))
+        nonlocal x,k # od teraz będzie można zmodyfikować
+        x += z     # x
+        k += z
+        print(x)
+        print('k = ' + str(k))
+    k = 1 # tę zmienną też zobaczy
+    return nested
+t = func4(5)
+t(2)
+t(3) # UWAGA!! nastąpi tutaj modyfikacja istniejącego stanu
+     # zostanie wyświetlona wartość 10 = 5 + 2 + 3
+k = t
+k(1)
+print('the state is = ' + str(t.state)) # odniesienie się do artrybutu funkcji
+t(1) #można tak przekazywać referencje obiektu funkcji w pamięci
+k(1)
+
+#Uwaga!
+#W przeciwieństwie do instrukcji global , zanim zmienna będzie ustawiona jako 
+#nonlocal ,to musi istnieć już w pamięci,czyli musi zostać ówcześnie stworzona w funkcji zawierajacej!
+
+
+
