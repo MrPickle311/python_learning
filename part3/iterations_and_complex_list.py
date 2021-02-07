@@ -131,10 +131,50 @@ print(L)
 L  = [x + y for x in Lx for y in Ly]#pętle idące w prawo są coraz bardziej
 print(L)                            #zagnieżdżane
 
-#mogę również tam umieścić klauzulę if ,ale to dopiszę później
-#!!! WRÓC TUTAJ W ROZDZIALE 20
+#użycie filtra if 
+L = [x for x in [1,2,3,4,5,6,7] if x % 2 == 0]
+print(L)
+
+#użycia filtra if w liście zagnieżdżonej 
+L = [(x*y,x+y) for x in [1,2,3,4,5,6,7] if x % 2 == 0 
+         for y in [1,2,3,4,5,6,7] if y % 2 == 1]
+print(L)
+
+M = [[1,2,3],
+     [4,5,6],
+     [7,8,9]]
+
+#iterowanie po przekątnej
+L = [M[x][x] for x in range(0,3)]
+print(L)
+
+#przetwarzanie wektora macierzy
+#jednak tutaj jest tworzona nowa macierz 
+M = [elem*2 for row in M for elem in row] # pętle leżące po prawej stronie innych pętli mają dostęp do 
+print(M)                                  # zmiennych iteracyjnych pętli po prawej stronie                                   
+
+M = [[1,2,3],
+     [4,5,6],
+     [7,8,9]]
+
+N = [[1,2,3],
+     [4,5,6],
+     [7,8,9]]
+
+#psuedo-mnożenie macierzy
+K = [M[row][col] * N[row][col] for row in range(3) for col in range(3)]
+print(K)
+
+#wsadzenie funkcji do listy składanej
+L = [ord(x) for x in 'xd']
+print(L)
+
+#FUNKCJA map() oraz listy składane działają z wydajnością C !!!
+#natomiast zwykłe pętle są wykonywane przez na maszynie wirtualnej Pythona
 
 # Inne konteksty iteracyjne
+print('Inne konteksty iteracyjne')
+
 
 #funkcje-narzędzia iteracyjne 
 #są dostępne też w podpiętch wyżej bibliotekach
