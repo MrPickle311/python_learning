@@ -2,7 +2,7 @@
 #nie zwracają wyniku ,tylko generator wyników
 #potrafią zawieszać swoje działanie i wznawiać je sekwencyjnie
 #w miarę generowania kolejnych wartości
-#są swoimi własnymi iteratorami jak pliki
+#są swoimi własnymi iteratorami jak pliki,patrz iterations_and_complex_list.py
 #pozwalają oszczędzić pamięć oraz zasoby procesora
 
 #przykład
@@ -67,3 +67,56 @@ print(sorted((x for x in s),reverse=True)) # tutaj nawiasy są już konieczne
 #Wyrażenia generatora a funkcja map
 #640
 
+#zagnieżdżone listy,generatory oraz funkcje map - porównanie
+L = [x * 2 for x in [x / 2 for x in (1,5,54,32,54,32,2)]]
+print(L)
+L = list(map(lambda x: x * 2,map(abs,[-2,5,-23,9,0])))
+print(L)
+L = list((x * 2 for x in [x ** 3 for x in [1,2,3,4]]))
+print(L)
+
+#do generatorów można również dać filter
+
+line = 'xd1 xd2 Xd'
+print(''.join(x.upper() + ' ' for x in line.split() if len(x) > 2))
+
+#rozszerzona składnia yield
+#czyli yield from
+
+def fg(N):
+    yield from range(N)
+    yield from (x ** 2 for x in range(N))
+
+#ta funkcja jest taka sama jak:
+
+def fg_prim(N):
+    for i in range(N): yield i
+    for i in (x ** 2 for x in range(N)): yield i
+
+#646 
+
+#generatory jako argumenty funkcji 
+
+def f(a,b,c) : print(a,b,c)
+#gwiazdka rozpakowuje sekwencje
+f(*(x ** 2 for x in range(3)))
+
+#załadowanie generatora do lambdy
+
+F = lambda x: (i**2 for i in range(x))
+G = F(5)
+print(next(G))
+print(next(G))
+print(next(G))
+print(next(G))
+print(next(G))
+G = F(6)
+print(next(G))
+print(next(G))
+print(next(G))
+print(next(G))
+print(next(G))
+print(next(G))
+print(list(G)) #pusta
+G = F(5)
+print(list(G)) #niepusta
