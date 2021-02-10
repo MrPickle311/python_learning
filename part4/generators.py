@@ -120,3 +120,55 @@ print(next(G))
 print(list(G)) #pusta
 G = F(5)
 print(list(G)) #niepusta
+
+def permute1(seq):
+    if not seq:
+        return [seq]
+    else:
+        res = []
+        for i in range(len(seq)):
+            rest = seq[i+1:] + seq[:i]  #biorę i-ty środkowy  zakres, ale wywalam 1 element
+            for x in permute1(rest):
+                res.append(seq[i:i+1] + x)
+        return res
+
+#to samo za pomocą generatora
+
+def permute2(seq):
+    if not seq:
+        yield  seq
+    else:
+        for i in range(len(seq)):
+            rest = seq[:i] + seq[i+1:]
+            for x in permute2(rest):
+                yield seq[i:i+1] + x
+
+L = "ABFD"
+print(permute1(L))
+
+#własna implementacja funkcji map jako lista składana oraz wyrażenie generatora
+def mymap(func,*seqs):
+    return [func(*args) for args in zip(*seqs)]
+
+def mymap2(func,*seqs):
+    return (func(*args) for args in zip(*seqs)) #zwracam wyrażenie generatora ,więc nie muszę używać słowa yield
+
+#własna implementacja funkcji zip
+
+def myzip(*seqs):
+    minlen = min(len(S) for S in seqs)
+    return (tuple(S[i] for S in seqs) for i in range(minlen))
+
+#wszystkie obiekty składane
+
+L = [x * x for x in range(10)] # Lista składana: zwraca listę
+G = (x * x for x in range(10)) # Wyrażenie generatora: zwraca elementy na żądanie
+S = {x * x for x in range(10)} # Zbiór składany, dostępny w wersjach 3.x i 2.7
+D = {x: x * x for x in range(10)} # Słownik składany, dostępny w wersjach
+
+#w zbiorach i słownikach składanych również można używać filtrów if 
+
+{x * x for x in range(10) if x % 2 == 0}
+{x: x * x for x in range(10) if x % 2 == 0}
+#pamiętaj ,że zbiory i słowniki nie zachowują kolejności oraz duplikatów kluczy!
+
