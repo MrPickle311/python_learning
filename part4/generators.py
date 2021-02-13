@@ -37,6 +37,9 @@ G = gen()
 print(next(G)) # Jako pierwsze wywołanie musi wystąpić next(), co uruchamia generator
 print(G.send(67)) # Wznowienie generatora z przekazaniem wartości
 
+#metoda send wznawia działanie generatora,
+#ale może także przekazać wartość, która pojawi się jako wartość wyrażenia yield
+
 #Wyrażenia generatorów — obiekty iterowalne spotykają
 #złożenia
 #638
