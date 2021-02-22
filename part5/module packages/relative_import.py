@@ -63,9 +63,29 @@ from . import string
 from .string import name1, name2
 #zaimportuje string.py z pakietu tzw. import względny
 
+from . import string # Składnia importów względnych
+
 # Podwójna kropka spowoduje
 # względny import, rozpoczynając od katalogu nadrzędnego, na przykład:
 
 from .. import spam # Importuje spam sąsiadujący z mypkg
 
-#Względne importy a bezwzględne ścieżki pakietów 755
+# Reguły importowania
+# 
+# 1.Importy względne są stosowanie wyłącznie wewnątrz pakietów 
+# 2. Względne importy stosuje się wyłącznie w instrukcji from
+
+# Różnice w wersjach
+
+# Importowanie z kropką: from . import m, from .m import x
+# Jest względne zarówno w wersji 2.x, jak i 3.x.
+
+# Importowanie bez kropki: import m, from m import x
+# Jest najpierw względne, a następnie bezwzględne w wersji 2.x, a bezwzględne tylko w wersji 3.x.
+
+# normalnych importów używaj do szukania w bibliotekach
+# względnych do odnajdywania się między pakietami
+
+# 762 
+# Pułapki związane z importem względnym w pakietach:
+# zastosowania mieszane
