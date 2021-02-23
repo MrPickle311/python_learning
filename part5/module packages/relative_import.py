@@ -88,4 +88,82 @@ from .. import spam # Importuje spam sąsiadujący z mypkg
 
 # 762 
 # Pułapki związane z importem względnym w pakietach:
-# zastosowania mieszane
+
+# Pakiety , a programy
+
+# Korzystanie z importu względnego uniemożliwia tworzenie pakietów, które służą zarówno
+# jako programy wykonywalne, jak i pakiety do importu z zewnątrz.
+# niektóre pliki również nie mogą już służyć jednocześnie jako moduły skryptów i moduły pakietów
+
+# więc jest możliwość zajścia potrzeby ,by pliki-moduły programu wydzielić do osobnego podkatalogu , oddzielonego
+# od plików skryptów najwyższego poziomu
+
+#więc import z pełnymi ścieżkami pakietu
+
+from system.section.mypkg import mod # Działa zarówno w trybie program, jak i pakiet
+
+# trybie pakietu zwykłe importowanie nie ładuje modułów
+# znajdujących się w tym samym katalogu, chyba że katalog ten jest głównym katalogiem pakietu
+
+# Jeśli mamy mieszane zastosowanie ,to można używać katalogu nadrzędnego jako samodzielnego programu 
+# ,a katalog zagnieżdżony nadal może służyć jako pakiet do użytku dla innych programów
+
+# code\pkg\main.py
+import sub.spam # <== Działa, jeżeli przeniesiemy moduły do podkatalogu „poniżej” pliku głównego
+# code\pkg\sub\spam.py
+from . import eggs # Importy względne wewnątrz pakietu teraz działają poprawnie (moduły w podkatalogach)
+# code\pkg\sub\eggs.py
+print('Eggs' * 4)
+
+# to rozwiązanie będzie działać we wszystkich wersjach
+# ale nie można tutaj indywidualnie testować modułów
+
+# c:\code> py 3 pkg\sub\spam.py # Poszczególne moduły nie mogą być uruchamiane indywidualnie, np. do testów
+# SystemError: ... cannot perform relative import
+
+# by to załatać można użyć importu bezwzględnego z użyciem pełnej ścieżki
+
+# code\pkg\main.py
+import spam
+# code\pkg\spam.py
+import pkg.eggs # <== Pełne ścieżki działają we wszystkich przypadkach; 2.x+3.x
+# code\pkg\eggs.py
+print('Eggs' * 4)
+
+# przykład jak powinno się to prawidłowo robić trochę inną metodą:
+
+# code\dualpkg\m1.py
+def somefunc():
+print('m1.somefunc')
+# code\dualpkg\m2.py
+import dualpkg.m1 as m1 # Zamień ten wiersz na odpowiednie polecenie importu
+def somefunc():
+m1.somefunc()
+print('m2.somefunc')
+if __name__ == '__main__':
+somefunc() # Autotest lub kod skryptu najwyższego poziomu
+
+
+# Pakiety przestrzeni w Python 3.3 
+
+# pozwala pakietom
+# składać się z wielu katalogów i nie wymaga pliku inicjującego __init__.py
+
+# Python 3.3 posiadają tylko dwa warianty pakietów
+# 1.Oryginalny model, obecnie znany jako pakiety regularne lub po prostu zwykłe
+# 2.Pakiety przestrzeni nazw
+
+#Algorytm w wersji 3.3
+
+# 1. Jeżeli zostanie znaleziony plik nazwa_katalogu\spam\__init__.py, importowany i zwracany jest
+# zwykły pakiet.
+# 2. Jeżeli zostanie znaleziony plik nazwa_katalogu\spam.py (lub spam.pyc lub inne rozszerzenie
+# modułu), importowany i zwracany jest zwykły pakiet.
+# 3. Jeżeli zostanie znaleziony katalog nazwa_katalogu\spam, zostanie on zapisany, a skanowanie
+# będzie kontynuowane w następnym katalogu ze ścieżki wyszukiwania.
+# 4. Jeżeli żaden z powyższych plików lub katalogów nie zostanie znaleziony, skanowanie
+# będzie kontynuowane od następnego katalogu ze ścieżki wyszukiwania.
+
+# w kroku 3 jest tworzony pakiet przestrzeni nazw 
+# reszta jest w folderze namespace packages
+
