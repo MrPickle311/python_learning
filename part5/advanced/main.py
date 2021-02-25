@@ -1,3 +1,4 @@
+import sys
 # reguły o których warto pamiętać
 #1. Zawsze jestem w jakimś module
 #2. Hermetyzuj wszystko i nie twórz zmiennych globalnych
@@ -25,3 +26,33 @@ print(_c)
 # musi się znaleźć na początku pliku
 
 # Mieszane tryby użycia — __name__ oraz __main__ 781
+
+# każdy moduł posiada wbudowany atrybut o nazwie __name__, który Python automatycznie
+# tworzy i przypisuje w następujący sposób:
+
+# 1.Jeżeli plik jest wykonywany jako plik programu najwyższego poziomu, po uruchomieniu
+# atrybut __name__ ustawiany jest na ciąg znaków "__main__".
+#2.Jeżeli plik jest importowany, atrybut __name__ jest zamiast tego ustawiany na nazwę modułu,
+# którą znają jego klienty.
+
+# W rezultacie moduł może testować swój własny atrybut __name__ w celu sprawdzenia, czy
+# jest wykonywany, czy też importowany.
+
+def tester():
+    print("Jest Gwiazdka w niebie...")
+if __name__ == '__main__': # Tylko przy wykonywaniu
+    tester() # A nie przy importowaniu
+
+# w zmiennej sys.argv są przechowywane argumenty wiersza poleceń
+
+print(sys.argv)
+
+# Po dokonaniu zmiany w liscie sys.path będzie ona miała wpływ na wszystkie przyszłe operacje importowania
+# w Pythonie, ponieważ wszystkie operacje importowania i wszystkie pliki współdzielą
+# jedną listę sys.path
+
+# takie ustawienia ścieżki sys.path trwają jedynie na czas działania
+# sesji Pythona lub programu (z technicznego punktu widzenia: procesu), który je utworzył. Nie są
+# one zachowywane po zakończeniu działania Pythona
+
+# 791
