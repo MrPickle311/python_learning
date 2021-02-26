@@ -1,10 +1,11 @@
 from math import sqrt # teraz nie muszę odwoływać math.sqrt
 from math import * # teraz wszystkie nazwy są kopiowane do zasięgu tego pliku
+from math import * # może zaciemnić lokalne zmienne
 from imp import reload # importowanie funkcji reload
 
 import support
 import support
-from support import z # (1)
+from support import z # (1), tu odbywa się kopiowanie do lokalnego zasięgu 
 
 
 #lub
@@ -62,6 +63,20 @@ print(list(support.__dict__.keys())) # tak można wylistować wszystkie nazwy z 
 # Przeładowanie ma wpływ jedynie na przyszłe wywołanie instrukcji from.
 
 reload(support) # znów się wyświetli Some initialization...
+
+from math import sqrt
+reload(math)
+# jeśli używam from do importowania ,to reload nie przeładuje prawidłowo modułu
+# gdyż odbywa się kopiowanie
+
+# tak to można załatać
+from imp import reload
+import math
+reload(math)
+from math import sqrt # Można też się poddać i użyć module.function()
+sqrt(1, 2, 3)
+
+# Nie importuj modułów siebie nazwajem
 
 #Instrukcja from może zaciemnić znaczenie zmiennej (to, w którym module została zdefiniowana),
 #może powodować problemy w czasie wywoływania funkcji reload (zmienna
