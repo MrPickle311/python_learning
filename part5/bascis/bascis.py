@@ -84,3 +84,6 @@ sqrt(1, 2, 3)
 #nazw (po cichu nadpisując zmienne wykorzystywane w zakresie bieżącym). Forma from *
 #jest pod wieloma względami gorsza — może poważnie zniszczyć przestrzenie nazw i zaciemnić
 #znaczenie zmiennych. Najlepiej jest używać jej oszczędnie.
+
+# Tylko moduł wykonywany jako program widzi inne moduły wokół siebie w tym samym katalogu
+# chyba ,że się da __init__.py lub można pokombinować z nowszymi pakietami
