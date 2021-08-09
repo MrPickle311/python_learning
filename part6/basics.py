@@ -89,3 +89,11 @@ print(o.name)
 
 # Tak naprawdę, jak zobaczymy w rozdziale 29 842
 
+#Wypisanie przestrzeni nazw klasy przez nas zdefiniowanej
+print(list(x for x in ThirdClass.__dict__ if not x.startswith('__'))) 
+
+#każda instancja ma łącze do swojej klasy
+print(o.__class__)
+
+# pole __bases__ jest krotką referencji do ich obiektów klasy nadrzędnej 
+print(ThirdClass.__bases__)
