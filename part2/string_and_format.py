@@ -309,3 +309,4 @@ a2 = a1 + 1
 print(s[a1] + ' and ' + s[a2] )
 
 print(s[a1:a2 + 1])
+b''

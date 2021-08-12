@@ -97,3 +97,23 @@ print(o.__class__)
 
 # pole __bases__ jest krotką referencji do ich obiektów klasy nadrzędnej 
 print(ThirdClass.__bases__)
+
+# mogę mieć funkcje jakąś sobie
+
+def uppername(obj):
+    return obj.name.upper()
+
+# i mogę ją przypisać do klasy(klasa jako obiekt)
+rec.method = uppername
+
+#dzięki temu mogę rozbudowywać klasy w locie
+obj1 = rec()
+
+print(obj1.method())
+
+#Instancje tej samej klasy nie muszą nawet mieć tego samego zbioru nazw atrybutów.
+
+#Używaj self w klasach ,to pomaga odczytać kod!
+
+
+
