@@ -336,5 +336,64 @@ class Iters2:
 # Czyli te dodatkowe operatory po prostu specjalizują nam konkretne operacje
 # a __getitem__ zbiera resztę tego , czego my nie obsłużyliśmy
 
-# 937 Dostęp do atrybutów — __getattr__ oraz __setattr_
+# Dostęp do atrybutów — __getattr__ oraz __setattr_
+
+# Metoda __getattr__ przechwytuje odwołania do atrybutów. Jest wywoływana z nazwą atrybutu
+# jako łańcuchem znaków, zawsze gdy próbujemy zapisać w składni kwalifikującej instancję
+# z niezdefiniowaną (nieistniejącą) nazwą atrybutu. Nie jest wywoływana, kiedy Python może odna-
+# leźć atrybut, wykorzystując do tego procedurę wyszukiwania w drzewie dziedziczenia.
+
+print('\n')
+
+class Empty:
+    def __getattr__(self, attrname):
+        if attrname == "age":
+            return 40
+        else:
+            raise AttributeError(attrname)
+    def __setattr__(self, attr, value):
+        if attr == 'pay':
+            self.__dict__[attr] = value + 10 # Niedozwolone self.name=val ani zewnętrzna funkcja setattr()
+        else:
+            raise AttributeError(attr + ' nie jest dozwolony')
+
+X = Empty()
+print(X.age)
+
+# Metoda __setattr__ jest nieco trudniejsza w użyciu, ponieważ przypisanie do dowolnych atrybutów self
+# wewnątrz wywołania metody __setattr__ ponownie wywołuje __setattr__ , powodując
+# nieskończoną pętlę rekurencji
+# Należy zapobiec powstaniu pętli poprzez zakodowanie
+# przypisania atrybutu instancji w postaci przypisania klucza słownika. Oznacza to, że trzeba
+# użyć zapisu self.__dict__['name'] = x zamiast self.name = x .
+
+X.pay = 100
+print(X.pay)
+
+# Argumentem trzeciej metody do zarządzania atrybutami, __delattr__ , jest ciąg znaków zawie-
+# rający nazwę atrybutu. Tak samo trzeba postępować jak wyżej (słownik)
+
+# Emulowanie prywatności w atrybutach instancji
+
+class PrivateExc(Exception): pass
+
+class Privacy:
+    def __setattr__(self, attrname, value):
+        if attrname in self.privates:
+            raise PrivateExc(attrname, self)
+        else:
+            self.__dict__[attrname] = value
+
+class Test1(Privacy):
+    privates = ['age']
+
+class Test2(Privacy):
+    privates = ['name', 'pay']
+    def __init__(self):
+        self.__dict__['name'] = 'Amadeusz'
+
+# Ale to rozwiązanie jest złe , lepsze jest w Dekoratorach
+
+# 945 Dodawanie prawostronne i miejscowa modyfikacja:
+
 
