@@ -396,4 +396,58 @@ class Test2(Privacy):
 
 # 945 Dodawanie prawostronne i miejscowa modyfikacja:
 
+# Każdy operator binarny ma wariant lewy, prawy
+# i miejscowy. Nawet jeżeli nie zakoduje się wszystkich trzech i stosowany jest wariant domyślny
 
+class Commuter:
+# Przeniesienie klasy operandu na wynik
+    def __init__(self, val):
+        self.val = val
+    def __add__(self, other):
+        if isinstance(other, Commuter): # Sprawdzenie typu w celu uniknięcia zagnieżdżenia obiektów
+            other = other.val
+        return Commuter(self.val + other) # Else i wynik drugiej instancji Commuter
+    def __radd__(self, other):
+        return Commuter(other + self.val)
+    def __str__(self):
+        return '<Commuter: %s>' % self.val
+
+x = Commuter(88)
+y = Commuter(99)
+print(x + 1) # __add__: instancja + nieinstancja
+print(1 + y) # __radd__: nieinstancja + instancja
+print(x + y) # __add__: instancja + instancja, wywołuje __radd__
+
+# Inne możliwe implementacje __radd__
+
+class Commuter2:
+    def __init__(self, val):
+        self.val = val
+    def __add__(self, other):
+        return self.val + other
+    def __radd__(self, other):
+        return self.__add__(other) # Jawne wywołanie __add__
+
+class Commuter4:
+    def __init__(self, val):
+        self.val = val
+    def __add__(self, other):
+        return self.val + other
+    __radd__ = __add__ # Alias: usunięcie pośrednika
+
+# Dodawanie w miejscu +=
+
+class Number:
+    def __init__(self, val):
+        self.val = val
+    def __iadd__(self, other):# __iadd__ wywołuje: x += y
+        self.val += other # Z reguły zwraca self
+        return self
+
+x = Number(5)
+x += 1
+x += 1
+print(x.val)
+
+# Wywołania — __call__949
+    
