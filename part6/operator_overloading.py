@@ -450,4 +450,53 @@ x += 1
 print(x.val)
 
 # Wywołania — __call__949
-    
+
+class Callee:
+    def __call__(self, *pargs, **kargs):# Przechwytuje wywołania instancji
+        print('Wywołanie:', pargs, kargs)# Akceptuje dowolne argumenty
+C = Callee()
+C(1, 2, 3)
+C(1, 2, 3, x=4, y=5)
+
+# Porównania — __lt__, __gt__ i inne
+
+class C:
+    data = 'spam'
+    def __gt__(self, other):
+        return self.data > other
+    def __lt__(self, other):
+        return self.data < other
+
+X = C()
+print(X > 'ham') # True (wywołuje __gt__)
+print(X < 'ham') # False (wywołuje __lt__)
+
+# awda zwrócona przez
+# operator == nie oznacza, że operator != na tych samych operandach zwróci fałsz, dlatego
+# metody __eq__ i __ne__ powinny być zdefiniowane w sposób niezależny
+
+# Testy logiczne — __bool__ i __len__
+
+class Truth:
+    def __bool__(self): return True
+    def __len__(self): return 0
+
+X = Truth()
+if X: print('tak!')
+
+# Python najpierw próbuje bezpo-
+# średnio uzyskać wartość logiczną, wywołując metodę __bool__ . Jeżeli tej metody nie ma, wy-
+# wołuje metodę __len__ i określa wynik logiczny na podstawie długości obiektu.
+
+# Destrukcja obiektu — __del__
+
+class Life:
+    def __init__(self, name='nieznajomy'):
+        print('Witaj', name)
+        self.name = name
+    def __del__(self):
+        print('Żegnaj', self.name)
+
+# ale lepiej ich  nie uzywać , bo sprawiają kłopoty
+
+# 961 Projektowanie z użyciem klas
