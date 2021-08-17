@@ -146,4 +146,10 @@ acts = [x.double, y.double, y.triple, z.double , square] # Lista metod związany
 for act in acts:
     print(act())
 
-# Klasy są obiektami — uniwersalne fabryki obiektów 981
+# Tworzenie klas mieszanych
+
+# Jeśli klasa dziedziczy wielokrotnie i mamy tę samą nazwę zdefiniowaną
+# w kilku klasach bazowych , to jest wybierana ta pierwsza z lewej , 
+# a jeśli na danym poziomie nic nie ma , to lecimy do góry
+
+# Odczyt listy atrybutów obiektu — __dict__ 985
