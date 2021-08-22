@@ -152,4 +152,145 @@ for act in acts:
 # w kilku klasach bazowych , to jest wybierana ta pierwsza z lewej , 
 # a jeśli na danym poziomie nic nie ma , to lecimy do góry
 
-# Odczyt listy atrybutów obiektu — __dict__ 985
+# Odczyt listy atrybutów obiektu — __dict__
+
+class ListInstance:
+    """
+    Klasa mieszana formatująca informacje wyświetlane przez metody
+    print i str za pomocą zkodowanej tutaj dziedziczonej metody __str__.
+    Nazwy __X zapobiegają konfliktom z atrybutami klas.
+    """
+    def __attrnames(self):
+        result = ''
+        for attr in sorted(self.__dict__):
+            result += '\tnazwa %s=%s\n' % (attr, self.__dict__ [attr])
+        return result
+    def __str__(self):
+        return '<Instancja klasy %s, adres %s:\n%s>' % (
+                        self.__class__.__name__,
+                        id(self),
+                        self.__attrnames())
+
+class Spam(ListInstance): # Dziedziczy metodę __str__
+    def __init__(self):
+        self.data1 = 'jedzenie'
+
+x = Spam()
+print(x)
+
+class Super:
+    def __init__(self):         # Metoda __init__ klasy nadrzędnej
+        self.data1 = 'mielonka' # Tworzenie atrybutów instancji
+    def ham(self):
+        pass
+    
+class Sub(Super, ListInstance): # Wmieszanie metod ham i __str__
+    def __init__(self):         # Metody wyświetlające mają dostęp do self
+        Super.__init__(self)
+        self.data2 = 'jajka'    # Więcej atrybutów instancji
+        self.data3 = 42
+    def spam(self):             # Definiujemy jeszcze jedną metodę
+        pass
+
+X = Sub()
+print(X)
+
+# Wyjście idealne do testowania , dziedziczenie argumentu funkcji
+
+def tester(listerclass, sept=False):
+
+    class Super:
+        def __init__(self):
+            self.data1 = 'mielonka'
+        def ham(self):
+            pass
+    class Sub(Super, listerclass):
+        def __init__(self):
+            Super.__init__(self)
+            self.data2 = 'jajka'
+            self.data3 = 42
+        def spam(self):
+            pass
+
+    instance = Sub()  # Zwrócenie instancji z metodą __str__ klasy listującej
+    print(instance)
+    if sept: print('-' * 80)
+
+# Wydobywanie atrybutów odziedziczonych z użyciem dir()
+
+# Słownik __dict__ zawiera bowiem jedynie atrybuty
+# instancji, natomiast funkcja dir dodatkowo zwraca atrybuty odziedziczone
+
+class ListInherited:
+    """
+    Wykorzystujemy funkcję dir() do uzyskania listy atrybutów instancji
+    oraz atrybutów odziedziczonych. W Pythonie 3.x uzyskamy większą liczbę
+    nazw w porównaniu z 2.x, ponieważ w modelu klas w nowym stylu niejawnie
+    stosowana jest klasa nadrzędna super. Metoda getattr pobiera odziedziczone
+    nazwy, których nie ma w self._dict_. Zamiast metody __repr__ należy
+    użyć __str__, ponieważ w przeciwnym wypadku podczas wyświetlania
+    związanych metod nastąpi zapętlenie!
+    """
+    def __attrnames(self, indent=' '*4):
+        result = 'Podkreślenia%s\n%s%%s\nInne%s\n' % ('-'*77, indent, '-'*77)
+        unders = []
+        for attr in dir(self): # Metoda dir instancji
+            if attr[:2] == '__' and attr[-2:] == '__': # Pominięcie wewnętrznych nazw
+                unders.append(attr)
+        else:
+            display = str(getattr(self, attr))[:82-(len(indent) + len(attr))]
+            result += '%s%s=%s\n' % (indent, attr, display)
+        return result % ', '.join(unders)
+                                
+tester(ListInherited)
+
+# Wypisywanie atrybutów dla każdego obiektu w drzewie klas
+
+class ListTree:
+    """
+    Klasa mieszana zwracająca ślad __str__ całego drzewa klasy
+    i atrybutów wszystkich jego obiektów na poziomie self i powyżej.
+    Metoda str uruchamiana za pomocą funkcji print zwraca skonstruowany
+    ciąg. Klasa wykorzystuje nazwy __X atrybutów, aby uniknąć konfliktów
+    z klientami. Jawnie odwołuje się do klas nadrzędnych i dla przejrzystości
+    wykorzystuje metodę str.format.
+    """
+    def __attrnames(self, obj, indent):
+        spaces = ' ' * (indent + 1)
+        result = ''
+        for attr in sorted(obj.__dict__):
+            if attr.startswith('__') and attr.endswith('__'):
+                result += spaces + '{0}\n'.format(attr)
+        else:
+            result += spaces + '{0}={1}\n'.format(attr, getattr(obj, attr))
+        return result
+    def __listclass(self, aClass, indent):
+        dots = '.' * indent
+        if aClass in self.__visited:
+            return '\n{0}<Klasa {1}:, adres {2}: (Patrz wyżej)>\n'.format(
+                            dots,
+                            aClass.__name__,
+                            id(aClass))
+        else:
+            self.__visited[aClass] = True
+            here = self.__attrnames(aClass, indent)
+            above = ''
+            for super in aClass.__bases__:
+                above += self.__listclass(super, indent+4)
+            return '\n{0}<Klasa {1}, adres {2}:\n{3}{4}{5}>\n'.format(
+                        dots,
+                        aClass.__name__,
+                        id(aClass),
+                        here, above,
+                        dots)
+    def __str__(self):
+        self.__visited = {}
+        here = self.__attrnames(self, 0)
+        above = self.__listclass(self.__class__, 4)
+        return '<Instancja {0}, adres {1}:\n{2}{3}>'.format(
+                            self.__class__.__name__,
+                            id(self),
+                            here, above)
+
+tester(ListTree)
+
