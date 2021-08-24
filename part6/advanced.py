@@ -152,3 +152,86 @@ print(x.h)
 # potrzeby zarządzania dostępem do slotów. W ten sposób przyspiesza się wykonywanie kod
 
 # Sloty i słowniki przestrzeni nazw 1035
+
+# POMIJAM : SLOTY, tylklo i wyłącznie przyspieszają dostęp do pamięci
+
+# Właściwości klas 
+
+# To jest przypisanie getterów , setterów , deleterów oraz doców
+# do pewnej zmiennej w klasie , co oznacza tyle ,że operacje IO na 
+# nich będą się odbywać poprzez te nowe funkcje
+
+class newprops():
+    def getage(self):
+        return 40
+    def setage(self, value):
+        print('ustawienie wieku: %s' % value)
+        self._age = value
+    age = property(getage, setage, None, None)
+
+x = newprops( )
+print(x.age) # Wykonuje getage
+x.age = 42 # Wykonuje setage ustawienie wieku: 42
+print(x._age) # Normalne pobranie; nie ma wywołania getage -> PODŁOGA PO NAZWIE
+print(x.age) # Wykonuje getage
+x.job = 'instruktor' # Normalne przypisanie; nie ma wywołania setage
+print(x.job)# Normalne pobranie; nie ma wywołania getage
+
+# Odpowiednik tej samej klasy ,ale za pomocą przeciążania operatorów
+
+class classic:
+    def __getattr__(self, name):
+        if name == 'age':
+            return 40
+        else:
+            raise AttributeError
+    def __setattr__(self, name, value):
+        print('ustawienie: %s %s' % (name, value))
+        if name == 'age':
+            self.__dict__['_age'] = value # Lub object.__setattr__()
+        else:
+            self.__dict__[name] = value
+
+# Metody statyczne
+# Są stworzone do współpracy z obiektem klasy, a nie — jak zwykłe metody — z obiektem instancji.
+
+class Spam:
+    numInstances = 0
+    def __init__(self):
+        Spam.numInstances = Spam.numInstances + 1
+    def printNumInstances(): # O to jest metoda statyczna , nie przyjmuje obiektu instancji
+        print("Liczba utworzonych instancji: ", Spam.numInstances)
+
+class Methods:
+    def imeth(self, x):            # Normal instance method: passed a self
+        print([self, x])
+
+    def smeth(x):                  # Static: no instance passed
+        print([x])
+
+    def cmeth(class_, x):             # Class: gets class, not instance
+        print([class_, x])
+
+    smeth = staticmethod(smeth)    # Make smeth a static method (or @: ahead)
+    cmeth = classmethod(cmeth)     # Make cmeth a class method (or @: ahead)
+
+#Z technicznego punktu widzenia Python pozwala na stosowanie trzech typów metod:
+#  metod instancji, którym przekazywany jest obiekt instancji self
+#  metod statycznych, którym nie jest przekazywany żaden dodatkowy obiekt (za pomocą
+#staticmethod );
+#  metod klas, którym przekazywany jest obiekt klasy (za pomocą classmethod i standardowo
+#w metaklasach).
+
+obj = Methods()
+
+
+# Metoda statyczna, wywoływana z klasy
+print(Methods.smeth(3)) # Instancja nie jest przekazywana ani oczekiwana
+# Metoda statyczna, wywoływana z instancji
+print(obj.smeth(4))# Instancja nie jest przekazywana
+
+
+Methods.cmeth(5) #Metoda klasy, wywoływana z klasy
+obj.cmeth(6)
+
+# POMINĄŁĘM DO KOŃCA ROZDZIAŁU , nic przydatnego -> zaczynamy wyjątki
