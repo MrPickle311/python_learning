@@ -1,7 +1,7 @@
 {
     "git.ignoreLimitWarning": true,
     "C_Cpp.default.configurationProvider": "go2sh.cmake-integration",
-    "python.pythonPath": "C:\\Users\\Damian\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
+    "python.pythonPath": "/usr/bin/python3",
     "cortex-debug.armToolchainPath": "c:\\Users\\Damian\\AppData\\Roaming\\Code\\User\\globalStorage\\bmd.stm32-for-vscode\\@xpack-dev-tools\\arm-none-eabi-gcc\\10.2.1-1.1.2\\.content\\bin",
     "cortex-debug.openocdPath": "C:\\USERS\\DAMIAN\\APPDATA\\ROAMING\\CODE\\USER\\GLOBALSTORAGE\\BMD.STM32-FOR-VSCODE\\@XPACK-DEV-TOOLS\\OPENOCD\\0.11.0-1.1\\.CONTENT\\BIN\\OPENOCD.EXE"
 }
