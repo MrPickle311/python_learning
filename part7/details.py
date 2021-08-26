@@ -130,3 +130,86 @@ def reciprocal(x):
 #     blok_with
 
 # 1130 
+
+# do elementu zmienna niekoniecznie przypisujemy wynik elementu wyrażenie .
+# Wynikiem elementu wyrażenie jest obiekt obsługujący protokół kontekstu, a do elementu
+# zmienna można przypisać coś innego, co zostanie wykorzystane wewnątrz instrukcji.
+
+# Czyli takie domykanie akcji obiektów 
+
+# Przykładowo tutaj menedżer kontekstu sprawia ,że plik jest zamykany
+# po wykonaniu się bloku with
+
+with open(r'C:\misc\data') as myfile:
+    for line in myfile:
+        print(line)
+
+# ten sam kod ale na wyjątkach
+
+myfile = open(r'C:\misc\data')
+try:
+    for line in myfile:
+        print(line)
+finally:
+    myfile.close()
+
+# Aby móc takie wyrażenie obsługiwać ,to obiekt z lewej
+# musi mieć metody __enter__ oraz __exit__
+
+# Wartość  zwracana przez __enter__
+# jest przypisywana do zmiennej w części as , jeśli jest ona obecna. W przeciwnym razie jest
+# ona usuwana.
+
+# Jeśli blok with zwraca wyjątek, wywołana zostaje metoda __exit__(typ, wartość, ślad)
+# zawierająca szczegóły wyjątku.
+
+# Jeśli metoda ta zwraca wartość będącą fałszem, wyjątek jest zgłaszany ponownie.
+# W przeciwnym razie wyjątek jest kończony
+
+# Jeśli blok with nie zgłasza wyjątku, metoda __exit__ nadal jest wywoływana, jednak do jej argu-
+# mentów typ , wartość oraz ślad przekazywane są obiekty None .
+
+class TraceBlock:
+    def message(self, arg):
+        print('running ' + arg)
+    def __enter__(self):
+        print('starting with block')
+        return self
+    def __exit__(self, exc_type, exc_value, exc_tb):
+        if exc_type is None:
+            print('exited normally\n')
+        else:
+            print('raise an exception! ' + str(exc_type))
+            return False    # Propagate
+
+if __name__ == '__main__':
+    with TraceBlock() as action:  
+        action.message('test 1')
+        print('reached')
+
+    with TraceBlock() as action:
+        action.message('test 2')
+        raise TypeError
+        print('not reached')
+
+# Usunięcie instrukcji return dałoby tutaj ten sam efekt, ponieważ domyślna wartość None zwra-
+# cana przez funkcję z definicji jest False .
+
+# metoda __exit__ zwraca self jako obiekt do przypisania do zmiennej as
+
+# Można również zagnieżdżać menedżery kontekstu np.
+
+with open('data') as fin, open('res', 'w') as fout:
+    for line in fin:
+        if 'some key' in line:
+            fout.write(line)
+
+# kod ten jest równoważny z tym:
+
+with open('data') as fin:
+    with open('res', 'w') as fout:
+        for line in fin:
+            if 'some key' in line:
+                fout.write(line)
+
+# 1137
