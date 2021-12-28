@@ -222,6 +222,35 @@ class Person:
 x = Person()
 x.name
 x.name = 'Bob'
-del x.name
+
+try:
+    del x.name
+except AttributeError as X:
+    print(X)
 
 # Metody __getattr__ oraz __getattribute__ 1248
+
+# * Metoda __getattr__ wykonywana jest dla atrybutów niezdefiniowanych, to znaczy atrybutów
+# nieprzechowywanych w instancji lub dziedziczonych po jednej z jej klas.
+# * Metoda __getattribute__ wykonywana jest dla każdego atrybutu, dlatego wykorzystując
+# ją, trzeba uważać i unikać pętli rekurencyjnych przy przekazywaniu dostępu do atrybutów
+# do klasy nadrzędnej.
+
+# jeśli klasa definiuje
+# lub dziedziczy poniższe metody, zostaną one wykonane automatycznie
+
+def __getattr__(self, nazwa): pass # Przy pobraniu niezdefiniowanego atrybutu [obiekt.nazwa]
+def __getattribute__(self, nazwa): pass# Przy pobraniu wszystkich atrybutów [obiekt.nazwa]
+def __setattr__(self, nazwa, wartość): pass# Przy przypisaniu wszystkich atrybutów [obiekt.nazwa=wartość]
+def __delattr__(self, nazwa): pass# Przy usunięciu wszystkich atrybutów[del obiekt.nazwa]
+
+class Catcher:
+    def __getattr__(self, name):
+      print('Pobranie:', name)
+    def __setattr__(self, name, value):
+       print('Ustawienie:', name, value)
+
+X = Catcher()
+print(X.job)
+print(X.pay)
+X.pay = 54
