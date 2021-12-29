@@ -425,6 +425,10 @@ print('**map/comp = %s' % round(mapcall.alltime / listcomp.alltime, 3))
 
 # kod dekoratorów klas
 
+# metoda __init__ wywoływana jest, kiedy
+# dekorator @ zostanie zastosowany do klasy, natomiast jej metoda __call__ uruchamiana jest,
+# kiedy tworzona jest instancja klasy podmiotowej.
+
 # jest tutaj podany przykład implementacji singletona za pomocą 3 różnych technik
 # nonlocal , artrybutów funkcji oraz klasy
 
@@ -496,4 +500,257 @@ X = Spam(val=42)                                # One Person, one Spam
 Y = Spam(99)
 print(X.attr, Y.attr)
 
-# 1312 Uwagi na temat klas II — zachowanie większej liczby instancji
+# ----------------------------------------------
+# przykłady zastosowania
+
+# rejestrowanie wywołań funkcji
+registry = {}
+
+
+def register(obj):
+    registry[obj.__name__] = obj
+    return obj  # Dekorator zarówno klasy, jak i funkcji
+
+
+@register
+def spam(x):
+    return(x ** 2)  # spam = register(spam)
+
+
+@register
+def ham(x):
+    return(x ** 3)
+
+
+@register
+class Eggs:
+    def __init__(self, x):
+        self.data = x ** 4
+
+    def __str__(self):
+        return str(self.data)
+
+
+print('Rejestr:')
+for name in registry:
+    print(name, '=>', registry[name], type(registry[name]))
+print('\nWywołania ręczne:')
+print(spam(2))
+print(ham(2))
+X = Eggs(2)
+print(X)
+print('\nWywołania z rejestru:')
+for name in registry:
+    print(name, '=>', registry[name](3))
+# Wywołanie z rejestru
+
+
+# Implementacja artrybutów prywatnych w Pythonie za pomocą dekoratorów
+
+traceMe = False
+
+
+def trace(*args):
+    if traceMe:
+        print('[' + ' '.join(map(str, args)) + ']')
+
+
+def Private(*privates):                              # privates in enclosing scope
+    def onDecorator(aClass):                         # aClass in enclosing scope
+        print(aClass)
+
+        class onInstance:                            # wrapped in instance attribute
+            def __init__(self, *args, **kargs):
+                self.wrapped = aClass(*args, **kargs)
+
+            def __getattr__(self, attr):             # My attrs don't call getattr
+                # Others assumed in wrapped
+                trace('get:', attr)
+                if attr in privates:
+                    raise TypeError('private attribute fetch: ' + attr)
+                else:
+                    return getattr(self.wrapped, attr)
+
+            def __setattr__(self, attr, value):             # Outside accesses
+                # Others run normally
+                trace('set:', attr, value)
+                if attr == 'wrapped':                       # Allow my attrs
+                    self.__dict__[attr] = value             # Avoid looping
+                elif attr in privates:
+                    raise TypeError('private attribute change: ' + attr)
+                else:
+                    setattr(self.wrapped, attr, value)      # Wrapped obj attrs
+        return onInstance                                   # Or use __dict__
+    return onDecorator
+
+#  Argumenty funkcji Private wykorzystywane są, zanim nastąpi dekoracja, i są zachowywane
+# w postaci referencji do zakresu funkcji zawierającej — do wykorzystania w onDecorator
+# oraz onInstance .
+#  Argument klasy dla onDecorator wykorzystywany jest w czasie dekoracji i zachowywany
+# w postaci referencji do zakresu funkcji zawierającej — do wykorzystania w czasie two-
+# rzenia instancji.
+#  Obiekt opakowanej instancji zachowywany jest w postaci atrybutu instancji w onInstance —
+# do wykorzystania, gdy w późniejszym czasie ma miejsce próba dostępu do atrybutów
+# spoza klasy.
+
+
+if __name__ == '__main__':
+    traceMe = True
+
+    # Doubler = Private(...)(Doubler)
+    @Private('data', 'size')
+    class Doubler:
+        def __init__(self, label, start):
+            self.label = label                 # Accesses inside the subject class
+            self.data = start                 # Not intercepted: run normally
+
+        def size(self):
+            return len(self.data)              # Methods run with no checking
+
+        def double(self):                      # Because privacy not inherited
+            for i in range(self.size()):
+                self.data[i] = self.data[i] * 2
+
+        def display(self):
+            print('%s => %s' % (self.label, self.data))
+
+    X = Doubler('X is', [1, 2, 3])
+    Y = Doubler('Y is', [-10, -20, -30])
+
+    # The following all succeed
+    print(X.label)                             # Accesses outside subject class
+    X.display()
+    X.double()
+    X.display()       # Intercepted: validated, delegated
+    print(Y.label)
+    Y.display()
+    Y.double()
+    Y.label = 'Spam'
+    Y.display()
+
+    # The following all fail properly
+try:
+    print(X.size())          # prints "TypeError: private attribute fetch: size"
+    print(X.data)
+    X.data = [1, 1, 1]
+    X.size = lambda S: 0
+except TypeError as te:
+    print("Failed!", te)
+
+# dekorator sprawdzający poprawność argumentów
+
+trace = True
+
+
+def rangetest(**argchecks):                 # Validate ranges for both+defaults
+    def onDecorator(func):                  # onCall remembers func and argchecks
+        if not __debug__:                   # True if "python -O main.py args..."
+            return func                     # Wrap if debugging; else use original
+        else:
+            code = func.__code__
+            allargs = code.co_varnames[:code.co_argcount]
+            funcname = func.__name__
+
+            def onCall(*pargs, **kargs):
+                # All pargs match first N expected args by position
+                # The rest must be in kargs or be omitted defaults
+                expected = list(allargs)
+                positionals = expected[:len(pargs)]
+
+                for (argname, (low, high)) in argchecks.items():
+                    # For all args to be checked
+                    if argname in kargs:
+                        # Was passed by name
+                        if kargs[argname] < low or kargs[argname] > high:
+                            errmsg = '{0} argument "{1}" not in {2}..{3}'
+                            errmsg = errmsg.format(
+                                funcname, argname, low, high)
+                            raise TypeError(errmsg)
+
+                    elif argname in positionals:
+                        # Was passed by position
+                        position = positionals.index(argname)
+                        if pargs[position] < low or pargs[position] > high:
+                            errmsg = '{0} argument "{1}" not in {2}..{3}'
+                            errmsg = errmsg.format(
+                                funcname, argname, low, high)
+                            raise TypeError(errmsg)
+                    else:
+                        # Assume not passed: default
+                        if trace:
+                            print('Argument "{0}" defaulted'.format(argname))
+                    # OK: wykonanie oryginalnego wywołania
+                    return func(*pargs, **kargs)
+            return onCall
+    return onDecorator
+
+
+@rangetest(age=(0, 120))                  # persinfo = rangetest(...)(persinfo)
+def persinfo(name, age):
+    print('%s is %s years old' % (name, age))
+
+
+@rangetest(M=(1, 12), D=(1, 31), Y=(0, 2013))
+def birthday(M, D, Y):
+    print('birthday = {0}/{1}/{2}'.format(M, D, Y))
+
+
+persinfo('Bob', 40)
+persinfo(age=40, name='Bob')
+birthday(5, D=1, Y=1963)
+
+try:
+    persinfo('Bob', 150)
+    persinfo(age=150, name='Bob')
+    birthday(5, D=40, Y=1963)
+except TypeError as te:
+    print(te)
+
+# Test methods, positional and keyword
+
+
+class Person:
+    def __init__(self, name, job, pay):
+        self.job = job
+        self.pay = pay
+        # giveRaise = rangetest(...)(giveRaise)
+
+    @rangetest(percent=(0.0, 1.0))        # percent passed by name or position
+    def giveRaise(self, percent):
+        self.pay = int(self.pay * (1 + percent))
+
+
+bob = Person('Bob Smith', 'dev', 100000)
+sue = Person('Sue Jones', 'dev', 100000)
+bob.giveRaise(.10)
+sue.giveRaise(percent=.20)
+print(bob.pay, sue.pay)
+try:
+    bob.giveRaise(1.10)
+    bob.giveRaise(percent=1.20)
+except TypeError as te:
+    print(te)
+
+# Test omitted defaults: skipped
+
+
+@rangetest(a=(1, 10), b=(1, 10), c=(1, 10), d=(1, 10))
+def omitargs(a, b=7, c=8, d=9):
+    print(a, b, c, d)
+
+
+omitargs(1, 2, 3, 4)
+omitargs(1, 2, 3)
+omitargs(1, 2, 3, d=4)
+omitargs(1, d=4)
+omitargs(d=4, a=1)
+omitargs(1, b=2, d=4)
+omitargs(d=8, c=7, a=1)
+
+try:
+    omitargs(1, 2, 3, 11)         # Bad d
+    omitargs(1, 2, 11)            # Bad c
+    omitargs(1, 2, 3, d=11)       # Bad d
+    omitargs(11, d=4)             # Bad a
+except TypeError as te:
+    print(te)
